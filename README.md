@@ -1,4 +1,4 @@
-# cost-estimate-tool
+# Cost Estimate Tool
 
 This template should help get you started developing with Vue 3 in Vite.
 
@@ -69,3 +69,7 @@ pnpm test:e2e --debug
 ```sh
 pnpm lint
 ```
+
+## AWS setup
+
+This project pushes the built files to an S3 bucket. To test this locally, you need to set up aws cli locally. See their docs on that here: [link](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
