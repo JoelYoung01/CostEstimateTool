@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  Build_and_Upload_to_S3:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: lts
 
       - name: Install Dependencies
         run: |
