@@ -9,7 +9,7 @@ import SendVideo from "./SendVideo.vue";
 import DonePage from "./DonePage.vue";
 
 type Stage = "ScheduleCall" | "Start" | "Draw" | "ContactInfo" | "Estimate" | "SendVideo" | "ConfirmPhone" | "Done";
-const defaultStage: Stage = "SendVideo";
+const defaultStage: Stage = "Start";
 
 const emit = defineEmits<{ close: [] }>();
 const currentStage = ref<Stage>(defaultStage);
@@ -60,6 +60,21 @@ const addContactInfo = (contactInfo: ContactInfo) => {
 
       <v-window-item value="Done">
         <DonePage @back="currentStage = 'SendVideo'" @schedule-call="currentStage = 'ScheduleCall'" />
+      </v-window-item>
+
+      <v-window-item value="ScheduleCall">
+        <v-card flat>
+          <v-card-title class="text-center mb-2" style="font-size: 24px; font-weight: bolder">
+            Schedule a Call
+          </v-card-title>
+          <v-card-text class="text-center" style="font-size: 1rem">
+            Pretend this takes you to the integrated calendar
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn @click="currentStage = 'Start'">Start Over</v-btn>
+          </v-card-actions>
+        </v-card>
       </v-window-item>
     </v-window>
   </v-card>
