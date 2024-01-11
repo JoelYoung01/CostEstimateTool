@@ -16,9 +16,12 @@ export default defineConfig({
     }
   },
   build: {
-    lib: {
-      entry: fileURLToPath(new URL("./src/main.ts", import.meta.url)),
-      name: "CostEstimationTool"
+    rollupOptions: {
+      output: {
+        entryFileNames: "cost-estimation-tool.js",
+        format: "iife",
+        compact: true
+      }
     }
   }
 });
