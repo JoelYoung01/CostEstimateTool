@@ -18,7 +18,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        entryFileNames: "cost-estimation-tool.js",
+        entryFileNames: "index.js",
         format: "iife",
         compact: true
       }
