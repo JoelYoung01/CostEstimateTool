@@ -24,7 +24,7 @@ const estimate = computed(() => {
 
 <template>
   <v-card flat max-width="600px">
-    <v-card-title class="mb-2 text-center" style="font-size: 24px; font-weight: bolder">
+    <v-card-title class="text-center mb-2" style="font-size: 24px; font-weight: bolder">
       Ballpark Range for {{ squareFootage }} SQFT:
     </v-card-title>
     <v-card-text class="d-flex align-center justify-center" style="gap: 24px">

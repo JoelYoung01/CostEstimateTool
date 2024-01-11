@@ -6,7 +6,7 @@ const showDialog = ref(false);
 </script>
 
 <template>
-  <v-btn>
+  <v-btn rounded color="primary" size="large">
     <v-dialog v-model="showDialog" activator="parent" width="auto">
       <EstimateContent @close="showDialog = false" />
     </v-dialog>

@@ -5,9 +5,11 @@ import StartPage from "./StartPage.vue";
 import DrawTool from "./DrawTool.vue";
 import CollectContactInfo from "./CollectContactInfo.vue";
 import EstimateResult from "./EstimateResult.vue";
+import SendVideo from "./SendVideo.vue";
+import DonePage from "./DonePage.vue";
 
 type Stage = "ScheduleCall" | "Start" | "Draw" | "ContactInfo" | "Estimate" | "SendVideo" | "ConfirmPhone" | "Done";
-const defaultStage: Stage = "Estimate";
+const defaultStage: Stage = "SendVideo";
 
 const emit = defineEmits<{ close: [] }>();
 const currentStage = ref<Stage>(defaultStage);
@@ -26,7 +28,7 @@ const addContactInfo = (contactInfo: ContactInfo) => {
 <template>
   <v-card min-width="600">
     <v-card-title class="d-flex justify-end">
-      <v-btn variant="text" icon="mdi-close" @click="exit" />
+      <v-btn size="small" variant="text" icon="mdi-close" @click="exit" />
     </v-card-title>
     <v-window v-model="currentStage" rounded class="px-2 pb-2">
       <v-window-item value="Start">
@@ -50,11 +52,15 @@ const addContactInfo = (contactInfo: ContactInfo) => {
         />
       </v-window-item>
 
-      <v-window-item value="SendVideo"> <div></div> </v-window-item>
+      <v-window-item value="SendVideo">
+        <SendVideo @link="currentStage = 'Done'" @skip="currentStage = 'Done'" @back="currentStage = 'Estimate'" />
+      </v-window-item>
 
       <v-window-item value="ConfirmPhone"> <div></div> </v-window-item>
 
-      <v-window-item value="Done"> <div></div> </v-window-item>
+      <v-window-item value="Done">
+        <DonePage @back="currentStage = 'SendVideo'" @schedule-call="currentStage = 'ScheduleCall'" />
+      </v-window-item>
     </v-window>
   </v-card>
 </template>

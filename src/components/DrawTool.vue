@@ -11,7 +11,7 @@ const mapData = ref<any>(null);
 
 <template>
   <v-card flat>
-    <v-card-title class="d-flex justify-center mb-2" style="font-size: 24px; font-weight: bolder">
+    <v-card-title class="text-center mb-2" style="font-size: 24px; font-weight: bolder">
       Outline the surfaces you want to sod
     </v-card-title>
 

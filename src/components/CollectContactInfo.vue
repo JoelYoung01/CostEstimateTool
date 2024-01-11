@@ -36,7 +36,7 @@ const daysFromToday = (date: Date) => {
 
 <template>
   <v-card flat>
-    <v-card-title class="mb-2 text-center" style="font-size: 18px; font-weight: bolder">
+    <v-card-title class="text-center mb-2" style="font-size: 24px; font-weight: bolder">
       We need a few more details from you<br />
       to calculate your estimate
     </v-card-title>
@@ -54,6 +54,7 @@ const daysFromToday = (date: Date) => {
         <v-text-field
           v-model="contactInfo.email"
           prepend-icon="mdi-email"
+          validate-on="blur"
           label="Email"
           placeholder="johndoe@gmail.com"
           variant="outlined"
