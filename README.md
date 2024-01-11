@@ -73,3 +73,25 @@ pnpm lint
 ## AWS setup
 
 This project pushes the built files to an S3 bucket. To test this locally, you need to set up aws cli locally. See their docs on that here: [link](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+
+## Demo
+
+Navigate to [SodSmith](https://sodsmith.com) and paste the following js function into your browser console to see the demo:
+
+```js
+function demo() {
+  var mountPoint = document.querySelector('.hide-on-mobile .nj-lead');
+  mountPoint.outerHTML = '<div id="cost-estimation-tool-mount-point" class="pr-4"></div>';
+
+  var mdiIcons = document.createElement('link');
+  mdiIcons.rel = "stylesheet";
+  mdiIcons.href = "https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css";
+  document.head.appendChild(mdiIcons);
+
+  var script = document.createElement('script');
+  script.src = "https://d3o7bndcxbs47b.cloudfront.net/cost-estimate-tool/index.js";
+  document.body.appendChild(script);
+};
+
+demo();
+```
