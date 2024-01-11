@@ -14,5 +14,11 @@ export default defineConfig({
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url))
     }
+  },
+  build: {
+    lib: {
+      entry: fileURLToPath(new URL("./src/main.ts", import.meta.url)),
+      name: "CostEstimationTool"
+    }
   }
 });
