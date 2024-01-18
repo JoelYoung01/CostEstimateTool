@@ -15,6 +15,7 @@ const SodSmithTheme: ThemeDefinition = {
   colors: {
     primary: sodSmithGreen,
     background: sodSmithWhite,
+    "on-background": sodSmithGreen,
     surface: sodSmithWhite,
     "on-surface": sodSmithGreen,
     secondary: sodSmithLightGreen,
