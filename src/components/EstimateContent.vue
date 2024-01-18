@@ -33,7 +33,7 @@ const addContactInfo = (contactInfo: ContactInfo) => {
     <v-card-title class="d-flex justify-end">
       <v-btn size="small" variant="text" icon="mdi-close" @click="exit" />
     </v-card-title>
-    <v-window v-model="currentStage" rounded class="px-2 pb-12">
+    <v-window v-model="currentStage" rounded class="px-2 pb-lg-8 pb-4">
       <v-window-item value="Start">
         <StartPage @self-guided="currentStage = 'Draw'" @schedule-call="currentStage = 'ScheduleCall'" />
       </v-window-item>
@@ -66,17 +66,13 @@ const addContactInfo = (contactInfo: ContactInfo) => {
       </v-window-item>
 
       <v-window-item value="ScheduleCall">
-        <v-card flat>
-          <v-card-title class="text-center mb-2" style="font-size: 24px; font-weight: bolder">
-            Schedule a Call
-          </v-card-title>
-          <v-card-text class="text-center" style="font-size: 1rem">
-            Pretend this takes you to the integrated calendar
-          </v-card-text>
-          <v-card-actions>
+        <v-card flat class="pa-lg-8 pa-4">
+          <div class="text-h5 font-weight-bold text-center mb-2">Schedule a Call</div>
+          <div class="text-center text-body-1 pb-lg-8 pb-4">Pretend this takes you to the integrated calendar</div>
+          <div class="d-flex mx-n2">
             <v-spacer />
-            <v-btn @click="currentStage = 'Start'">Start Over</v-btn>
-          </v-card-actions>
+            <v-btn slim variant="text" @click="currentStage = 'Start'">Start Over</v-btn>
+          </div>
         </v-card>
       </v-window-item>
     </v-window>

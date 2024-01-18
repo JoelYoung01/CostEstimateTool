@@ -38,7 +38,7 @@ const daysFromToday = (date: Date) => {
 </script>
 
 <template>
-  <v-card flat class="px-lg-8 px-4">
+  <v-card flat class="px-lg-8 px-4" max-width="600">
     <div class="text-h5 text-center font-weight-bold mb-2">
       {{ mobile ? "Enter a few more details" : "We need a few more details from you to calculate your estimate" }}
     </div>

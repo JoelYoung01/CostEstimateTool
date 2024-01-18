@@ -28,7 +28,7 @@ const estimate = computed(() => {
 <template>
   <v-card flat max-width="600px" class="px-lg-6 px-4">
     <div class="text-h5 text-center mb-2 font-weight-bold">Ballpark Range for {{ squareFootage }} SQFT:</div>
-    <v-card-text class="d-flex align-center justify-center" :style="{ gap: mobile ? '12px' : '12px' }">
+    <v-card-text class="d-flex align-center justify-center" :style="{ gap: mobile ? '12px' : '24px' }">
       <v-chip size="x-large" variant="elevated" color="secondary"> ${{ estimate - 150 }} </v-chip>
       <v-icon icon="mdi-arrow-left-right" size="x-large" />
       <v-chip size="x-large" variant="elevated" color="secondary"> ${{ estimate + 150 }} </v-chip>
