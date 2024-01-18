@@ -7,6 +7,9 @@ import CollectContactInfo from "./CollectContactInfo.vue";
 import EstimateResult from "./EstimateResult.vue";
 import SendVideo from "./SendVideo.vue";
 import DonePage from "./DonePage.vue";
+import { useDisplay } from "vuetify";
+
+const { mobile } = useDisplay();
 
 type Stage = "ScheduleCall" | "Start" | "Draw" | "ContactInfo" | "Estimate" | "SendVideo" | "ConfirmPhone" | "Done";
 const defaultStage: Stage = "Start";
@@ -26,11 +29,11 @@ const addContactInfo = (contactInfo: ContactInfo) => {
 </script>
 
 <template>
-  <v-card min-width="600">
+  <v-card :min-width="mobile ? undefined : 600">
     <v-card-title class="d-flex justify-end">
       <v-btn size="small" variant="text" icon="mdi-close" @click="exit" />
     </v-card-title>
-    <v-window v-model="currentStage" rounded class="px-2 pb-2">
+    <v-window v-model="currentStage" rounded class="px-2 pb-12">
       <v-window-item value="Start">
         <StartPage @self-guided="currentStage = 'Draw'" @schedule-call="currentStage = 'ScheduleCall'" />
       </v-window-item>

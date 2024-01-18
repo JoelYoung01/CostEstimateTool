@@ -1,7 +1,8 @@
 // Vuetify
-import "vuetify/styles";
+// import "vuetify/styles";
+import "@/assets/styles/main.scss";
 import "@mdi/font/css/materialdesignicons.css";
-import { createVuetify } from "vuetify";
+import { createVuetify, type ThemeDefinition } from "vuetify";
 
 const sodSmithGreen = "#16441C";
 const sodSmithGray = "#2a2e32";
@@ -9,23 +10,26 @@ const sodSmithLightGreen = "#53a22f";
 const sodSmithOffWhite = "#E2DDCE";
 const sodSmithWhite = "#eef0f2";
 
+const SodSmithTheme: ThemeDefinition = {
+  dark: false,
+  colors: {
+    primary: sodSmithGreen,
+    background: sodSmithWhite,
+    surface: sodSmithWhite,
+    "on-surface": sodSmithGreen,
+    secondary: sodSmithLightGreen,
+    gray: sodSmithGray,
+    offWhite: sodSmithOffWhite
+  }
+};
+
 const vuetify = createVuetify({
   theme: {
     themes: {
-      light: {
-        dark: false,
-        colors: {
-          primary: sodSmithGreen,
-          background: sodSmithWhite,
-          surface: sodSmithWhite,
-          "on-surface": sodSmithGreen,
-          secondary: sodSmithLightGreen,
-          gray: sodSmithGray,
-          offWhite: sodSmithOffWhite
-        }
-      }
+      SodSmithTheme
     }
   }
 });
 
+export { SodSmithTheme };
 export default vuetify;
