@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import exampleImage from "@/assets/images/TakeVideoExampleImage.png";
+import { useDisplay } from "vuetify";
 
 const emit = defineEmits<{ link: [string]; skip: []; back: [] }>();
 
@@ -8,25 +9,25 @@ const buildLink = () => {
   emit("link", link);
   window.open(link, "_blank");
 };
+
+const { mobile } = useDisplay();
 </script>
 
 <template>
-  <v-card flat>
-    <v-card-title class="text-center mb-2" style="font-size: 24px; font-weight: bolder">
-      Send us your Project Video in one click
-    </v-card-title>
-    <v-img height="400" :src="exampleImage" class="mb-4" />
+  <v-card flat class="px-lg-8 px-4">
+    <div class="text-center text-h5 font-weight-bold mb-2">Send us your Project Video in one click</div>
+    <v-img :height="mobile ? 200 : 400" :src="exampleImage" class="mb-4" />
 
-    <div class="d-flex justify-center">
-      <v-btn size="x-large" rounded variant="elevated" class="mx-auto" color="primary" @click="buildLink()"
-        >Get Link</v-btn
-      >
+    <div class="d-flex justify-center mb-6">
+      <v-btn size="x-large" rounded variant="elevated" class="mx-auto" color="primary" @click="buildLink()">
+        Get Link
+      </v-btn>
     </div>
 
-    <v-card-actions>
-      <v-btn variant="text" @click="emit('back')">Back</v-btn>
+    <div class="d-flex mx-n2">
+      <v-btn slim variant="text" @click="emit('back')">Back</v-btn>
       <v-spacer />
-      <v-btn color="primary" @click="emit('skip')">Skip for now</v-btn>
-    </v-card-actions>
+      <v-btn slim variant="text" @click="emit('skip')">Skip for now</v-btn>
+    </div>
   </v-card>
 </template>
