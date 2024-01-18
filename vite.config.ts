@@ -16,10 +16,12 @@ export default defineConfig({
     }
   },
   build: {
-    lib: {
-      entry: "./src/main.ts",
-      name: "cost-estimate-tool",
-      fileName: "index"
+    rollupOptions: {
+      output: {
+        entryFileNames: "index.js",
+        format: "iife",
+        compact: true
+      }
     }
   }
 });

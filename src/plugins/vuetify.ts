@@ -1,7 +1,6 @@
 // Vuetify
 // import "vuetify/styles";
 import "@/assets/styles/main.scss";
-import "@mdi/font/css/materialdesignicons.css";
 import { createVuetify, type ThemeDefinition } from "vuetify";
 
 const sodSmithGreen = "#16441C";
