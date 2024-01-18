@@ -88,11 +88,6 @@ function demo() {
   mdiIcons.href = "https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css";
   document.head.appendChild(mdiIcons);
 
-  var style = document.createElement('link');
-  style.rel = "stylesheet";
-  style.href = "https://d3o7bndcxbs47b.cloudfront.net/cost-estimate-tool/style.css";
-  document.head.appendChild(style);
-
   var script = document.createElement('script');
   script.src = "https://d3o7bndcxbs47b.cloudfront.net/cost-estimate-tool/index.js";
   document.body.appendChild(script);
