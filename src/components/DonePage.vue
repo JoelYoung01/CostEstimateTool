@@ -3,24 +3,28 @@ const emit = defineEmits<{ back: []; scheduleCall: [] }>();
 </script>
 
 <template>
-  <v-card flat width="600">
-    <v-card-title class="text-center" style="font-size: 48px; line-height: 1.2; font-weight: bolder">
-      Hooray! 🎉
-    </v-card-title>
-    <v-card-subtitle class="text-center" style="font-size: 1rem; font-weight: bolder">
-      Thank you for using our online estimation tool!
-    </v-card-subtitle>
+  <v-card flat max-width="600" class="px-lg-8 px-4">
+    <div class="text-center text-h3 font-weight-bold">Hooray! 🎉</div>
+    <div class="text-center text-h6 text-dimmed pb-lg-6 pb-4">Thank you for using our online estimation tool!</div>
 
-    <v-card-text class="text-center" style="font-size: 1rem">
+    <div class="text-center text-body-1 pb-lg-8 pb-4">
       To confirm the price, please schedule a phone call with a Sod Smith representative by clicking the link below.
       This call typically takes 5 - 7 minutes and then you'll have a confirmed price.
-    </v-card-text>
-    <v-card-text class="text-center" style="font-size: 1rem"> We look forward to hearing from you!</v-card-text>
+      <br />
+      <br />
+      We look forward to hearing from you!
+    </div>
 
-    <v-card-actions>
-      <v-btn @click="emit('back')">Back</v-btn>
+    <div class="d-flex mx-n2">
+      <v-btn slim variant="text" @click="emit('back')">Back</v-btn>
       <v-spacer />
       <v-btn variant="elevated" class="px-4" color="primary" rounded @click="emit('scheduleCall')">Schedule Call</v-btn>
-    </v-card-actions>
+    </div>
   </v-card>
 </template>
+
+<style scoped>
+.text-dimmed {
+  opacity: 60%;
+}
+</style>
