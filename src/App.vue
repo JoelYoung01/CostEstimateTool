@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import EstimateContent from "@/components/EstimateContent.vue";
-import { useDisplay } from "vuetify";
 
 const showDialog = ref(false);
-const { mobile } = useDisplay();
 </script>
 
 <template>
