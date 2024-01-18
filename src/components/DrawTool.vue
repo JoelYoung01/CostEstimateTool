@@ -11,9 +11,7 @@ const mapData = ref<any>(null);
 
 <template>
   <v-card flat class="px-lg-10 px-4">
-    <div class="text-h5 text-center mb-2" style="font-size: 24px; font-weight: bolder">
-      Outline the surfaces you want to sod
-    </div>
+    <div class="text-h5 text-center font-weight-bold mb-2">Outline the surfaces you want to sod</div>
 
     <v-skeleton-loader type="image" />
 

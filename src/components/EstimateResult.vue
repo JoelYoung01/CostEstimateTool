@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useDisplay } from "vuetify";
 
 const props = defineProps<{
   squareFootage: number;
@@ -10,6 +11,8 @@ const emit = defineEmits<{
   continue: [];
   back: [];
 }>();
+
+const { mobile } = useDisplay();
 
 const pricePerSquareFoot = 3.5;
 const pricePerFastDay = 10;
@@ -23,26 +26,24 @@ const estimate = computed(() => {
 </script>
 
 <template>
-  <v-card flat max-width="600px">
-    <v-card-title class="text-center mb-2" style="font-size: 24px; font-weight: bolder">
-      Ballpark Range for {{ squareFootage }} SQFT:
-    </v-card-title>
-    <v-card-text class="d-flex align-center justify-center" style="gap: 24px">
+  <v-card flat max-width="600px" class="px-lg-6 px-4">
+    <div class="text-h5 text-center mb-2 font-weight-bold">Ballpark Range for {{ squareFootage }} SQFT:</div>
+    <v-card-text class="d-flex align-center justify-center" :style="{ gap: mobile ? '12px' : '12px' }">
       <v-chip size="x-large" variant="elevated" color="secondary"> ${{ estimate - 150 }} </v-chip>
       <v-icon icon="mdi-arrow-left-right" size="x-large" />
       <v-chip size="x-large" variant="elevated" color="secondary"> ${{ estimate + 150 }} </v-chip>
     </v-card-text>
 
-    <v-card-text class="text-center" style="font-size: 1rem">
+    <div class="text-center text-body-1 mb-6">
       There are multiple factors that affect pricing including project access, current surface conditions, fences,
       stairs, and more. Fortunately, we can provide a more accurate price in just a few clicks! If the range above is
       within your budget, click 'continue'.
-    </v-card-text>
+    </div>
 
-    <v-card-actions>
-      <v-btn variant="text" @click="emit('back')">Back</v-btn>
+    <div class="d-flex mx-n2">
+      <v-btn slim variant="text" @click="emit('back')">Back</v-btn>
       <v-spacer />
-      <v-btn color="primary" @click="emit('continue')">Continue</v-btn>
-    </v-card-actions>
+      <v-btn slim variant="text" @click="emit('continue')">Continue</v-btn>
+    </div>
   </v-card>
 </template>
