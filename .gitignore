@@ -29,5 +29,9 @@ coverage
 
 *.tsbuildinfo
 
+# Testing stuff
 test-results/
 playwright-report/
+
+# Environment Variables
+.env
