@@ -33,7 +33,7 @@ const addContactInfo = (contactInfo: ContactInfo) => {
     <v-card-title class="d-flex justify-end">
       <v-btn size="small" variant="text" icon="mdi-close" @click="exit" />
     </v-card-title>
-    <v-window v-model="currentStage" rounded class="px-2 pb-lg-8 pb-4">
+    <v-window v-model="currentStage" rounded :touch="{ left: () => null, right: () => null }" class="px-2 pb-lg-8 pb-4">
       <v-window-item value="Start">
         <StartPage @self-guided="currentStage = 'Draw'" @schedule-call="currentStage = 'ScheduleCall'" />
       </v-window-item>

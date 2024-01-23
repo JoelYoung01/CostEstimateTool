@@ -9,11 +9,10 @@ import DrawingManager from "./DrawingManager.vue";
 const error = ref<string>();
 const loadingApi = ref(false);
 const mapDrawer = ref<InstanceType<typeof DrawMap>>();
-const drawManagerRef = ref<InstanceType<typeof DrawingManager>>();
 
 const onPlaceSelect = (placeId?: string) => {
   if (!placeId) return;
-  drawManagerRef.value?.centerOnPlace(placeId);
+  mapDrawer.value?.centerOnPlace(placeId);
 };
 
 const initGoogleApi = async () => {
@@ -48,7 +47,12 @@ initGoogleApi();
       {{ error }}
       <v-btn variant="text" @click="initGoogleApi">Retry</v-btn>
     </v-alert>
-    <DrawMap v-else ref="mapDrawer" style="height: 30vh" />
-    <DrawingManager v-if="mapDrawer" ref="drawManagerRef" :map-ref="mapDrawer.mapRef" />
+    <DrawMap v-else ref="mapDrawer" />
+    <DrawingManager
+      :total-area="mapDrawer?.totalArea ?? 0"
+      :disabled-clear-all="!mapDrawer || mapDrawer.polygonCount === 0"
+      @center-on-user="mapDrawer?.centerOnUser()"
+      @clear-all-polygons="mapDrawer?.clearAllPolygons()"
+    />
   </div>
 </template>
