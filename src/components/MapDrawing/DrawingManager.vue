@@ -1,15 +1,22 @@
 <script setup lang="ts">
 /// <reference types="google.maps" />
-import { onMounted } from "vue";
-import { onBeforeUnmount } from "vue";
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount, computed, toRaw } from "vue";
 import type { GoogleMap } from "vue3-google-map";
+
+interface DrawnArea {
+  polygon: google.maps.Polygon;
+  area: number;
+  listeners: google.maps.MapsEventListener[];
+}
 
 const props = defineProps<{ mapRef: InstanceType<typeof GoogleMap> | undefined }>();
 
 const drawingManager = ref<google.maps.drawing.DrawingManager>();
-const allPolygons = ref<google.maps.Polygon[]>([]);
-const totalArea = ref<number>(0);
+const allPolygons = ref<DrawnArea[]>([]);
+
+const totalArea = computed(() => {
+  return allPolygons.value.reduce((acc, cur) => acc + cur.area, 0);
+});
 
 const centerOnUser = () => {
   if (!props.mapRef) return;
@@ -34,26 +41,28 @@ const centerOnPlace = (place_id: string) => {
 };
 
 const handleNewPolygon = (newPolygon: google.maps.Polygon) => {
-  newPolygon.addListener("contextmenu", () => {
-    removePolygon(newPolygon);
-  });
+  const newDrawnArea: DrawnArea = {
+    polygon: newPolygon,
+    area: google.maps.geometry.spherical.computeArea(newPolygon.getPath(), 2.093e7),
+    listeners: []
+  };
 
-  newPolygon.addListener("click", () => {
-    // do nothing
-  });
+  newDrawnArea.listeners.push(
+    newPolygon.addListener("contextmenu", () => {
+      removePolygon(newDrawnArea);
+    })
+  );
 
-  totalArea.value += google.maps.geometry.spherical.computeArea(newPolygon.getPath(), 2.093e7);
-  allPolygons.value.push(newPolygon);
+  allPolygons.value.push(newDrawnArea);
 };
 
-const removePolygon = (polygon: google.maps.Polygon) => {
-  totalArea.value -= google.maps.geometry.spherical.computeArea(polygon.getPath(), 2.093e7);
-  polygon.setMap(null);
-  allPolygons.value = allPolygons.value.filter((p) => p.getMap() !== null);
+const removePolygon = (drawnArea: DrawnArea) => {
+  toRaw(drawnArea.polygon).setMap(null);
+  allPolygons.value = allPolygons.value.filter((p) => p.polygon.getMap() !== null);
 };
 
 const clearAllPolygons = () => {
-  allPolygons.value.forEach((p) => removePolygon(p));
+  allPolygons.value.forEach(removePolygon);
 };
 
 const initMap = async () => {

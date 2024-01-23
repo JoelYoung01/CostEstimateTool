@@ -7,12 +7,15 @@ interface PlaceSelectItem {
   placeObject: google.maps.places.AutocompletePrediction;
 }
 
+defineProps<{ disabled?: boolean }>();
+
 defineEmits<{
-  "place-selected": [placeId: string];
+  "place-selected": [placeId: string | undefined];
 }>();
 
 let autocompleteService: google.maps.places.AutocompleteService;
 const loadingApi = ref(true);
+const apiLoadError = ref<string>();
 const searchText = ref<string>();
 const loadingResults = ref(false);
 const searchResults = ref<PlaceSelectItem[]>([]);
@@ -47,11 +50,26 @@ watch(searchText, async (newVal) => {
 });
 
 const initSearchService = async () => {
-  loadingApi.value = true;
-  while (!google?.maps?.places) {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+  if (!import.meta.env.VITE_GOOGLE_API_KEY) {
+    apiLoadError.value = "Unable to load place selector: missing Google Maps Key.";
+    console.error(apiLoadError.value);
+    return;
   }
-  autocompleteService = new google.maps.places.AutocompleteService();
+
+  loadingApi.value = true;
+  let retryCount = 0;
+  try {
+    while (typeof google === "undefined" || !google?.maps?.places) {
+      if (retryCount++ > 10) {
+        throw new Error("Timed out waiting for Google Maps API to load.");
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    }
+    autocompleteService = new google.maps.places.AutocompleteService();
+  } catch (er) {
+    console.error("Unable to load search service:", er);
+  }
   loadingApi.value = false;
 };
 
@@ -61,6 +79,7 @@ initSearchService();
 <template>
   <v-autocomplete
     v-model:search="searchText"
+    :disabled="disabled || !!apiLoadError"
     :items="searchResults"
     :loading="loadingResults"
     placeholder="Jump to a location..."
