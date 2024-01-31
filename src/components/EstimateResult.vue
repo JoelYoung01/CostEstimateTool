@@ -51,7 +51,7 @@ const estimate = computed(() => {
     </v-card-text>
 
     <div class="text-center text-body-1 mb-6">
-      If the range above is within your budget, click 'continue' to get your personalized quote!
+      If the range above is within your budget, continue to get your personalized quote!
     </div>
 
     <div class="d-flex mx-n2">

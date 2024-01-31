@@ -1,10 +1,10 @@
 <script setup lang="ts">
-// import exampleImage from "@/assets/images/TakeVideoExampleImage.png";
+import exampleImage from "@/assets/images/TakeVideoExampleImage.png";
 import { useDisplay } from "vuetify";
 
 const emit = defineEmits<{ link: [string]; skip: []; back: [] }>();
 
-const exampleImage = new URL("@/assets/images/TakeVideoExampleImage.png", import.meta.url).href;
+// const exampleImage = new URL("@/assets/images/TakeVideoExampleImage.png", import.meta.url).href;
 
 const buildLink = () => {
   const link = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
