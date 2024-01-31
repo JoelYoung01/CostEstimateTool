@@ -20,7 +20,15 @@ const emit = defineEmits(["confirm", "back"]);
     <div class="d-flex mx-n2">
       <v-btn slim variant="text" @click="emit('back')">Back</v-btn>
       <v-spacer />
-      <v-btn :disabled="dataPackage.drawnAreas.length === 0" slim variant="text" @click="emit('confirm')">
+      <v-btn
+        variant="elevated"
+        color="primary"
+        class="px-4"
+        rounded
+        :disabled="dataPackage.drawnAreas.length === 0"
+        slim
+        @click="emit('confirm')"
+      >
         Confirm
       </v-btn>
     </div>
