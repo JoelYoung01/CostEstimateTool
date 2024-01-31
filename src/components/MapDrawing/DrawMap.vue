@@ -55,14 +55,17 @@ const centerOnPlace = (place_id: string) => {
 };
 
 const handleNewPolygon = async (newPolygon: google.maps.Polygon) => {
-  const comments = await commentGetter.value?.getComment();
+  if (typeof commentGetter.value === "undefined") removePolygon({ polygon: newPolygon, area: 0 });
 
-  if (typeof comments === "undefined") removePolygon({ polygon: newPolygon, area: 0 });
+  const { comments, fencedInYard, accessibleFromStreet, stairsToAccess } = await commentGetter.value!.getComment();
 
   const newDrawnArea: DrawnArea = {
     polygon: newPolygon,
     area: google.maps.geometry.spherical.computeArea(newPolygon.getPath(), 2.093e7),
-    comments
+    comments,
+    fencedInYard,
+    accessibleFromStreet,
+    stairsToAccess
   };
 
   newPolygon.addListener("contextmenu", () => {

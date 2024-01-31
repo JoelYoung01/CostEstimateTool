@@ -2,10 +2,27 @@
 import { watch } from "vue";
 import { ref } from "vue";
 
+interface SubmitPayload {
+  comments?: string;
+  fencedInYard: boolean;
+  accessibleFromStreet: boolean;
+  stairsToAccess: boolean;
+}
+
 const showDialog = ref(false);
-const comment = ref<string>();
+const comments = ref<string>();
+const fencedInYard = ref(false);
+const accessibleFromStreet = ref(false);
+const stairsToAccess = ref(false);
 
 const eventTarget = new EventTarget();
+
+function reset() {
+  comments.value = undefined;
+  fencedInYard.value = false;
+  accessibleFromStreet.value = false;
+  stairsToAccess.value = false;
+}
 
 async function getComment() {
   showDialog.value = true;
@@ -14,7 +31,7 @@ async function getComment() {
 }
 
 function waitForComment(eventTarget: EventTarget, eventName: string) {
-  return new Promise<string | undefined>((resolve) => {
+  return new Promise<SubmitPayload>((resolve) => {
     const listener = (event: any) => {
       eventTarget.removeEventListener(eventName, listener);
       resolve(event.detail);
@@ -25,8 +42,14 @@ function waitForComment(eventTarget: EventTarget, eventName: string) {
 
 watch(showDialog, (newVal) => {
   if (!newVal) {
-    eventTarget.dispatchEvent(new CustomEvent("comment", { detail: comment.value }));
-    comment.value = undefined;
+    const submitDetail: SubmitPayload = {
+      comments: comments.value,
+      fencedInYard: fencedInYard.value,
+      accessibleFromStreet: accessibleFromStreet.value,
+      stairsToAccess: stairsToAccess.value
+    };
+    eventTarget.dispatchEvent(new CustomEvent("comment", { detail: submitDetail }));
+    reset();
   }
 });
 
@@ -38,10 +61,13 @@ defineExpose({
 <template>
   <v-dialog v-model="showDialog" width="auto">
     <v-card>
-      <div class="px-6 pt-3">Add a comment about this area (Optional)</div>
-      <v-card-text>
-        <v-textarea v-model="comment" label="Comment" />
-      </v-card-text>
+      <div class="text-subtitle-1 px-6 pt-3">Add some details about this area</div>
+      <div class="px-6">
+        <v-checkbox v-model="fencedInYard" hide-details density="compact" label="Fenced in yard?" />
+        <v-checkbox v-model="accessibleFromStreet" hide-details density="compact" label="Accessible from street?" />
+        <v-checkbox v-model="stairsToAccess" hide-details density="compact" label="Stairs to access?" />
+        <v-textarea v-model="comments" label="Comment (Optional)" />
+      </div>
       <v-card-actions>
         <v-spacer />
         <v-btn color="primary" variant="elevated" @click="showDialog = false">Submit</v-btn>
