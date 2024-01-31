@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, inject } from "vue";
 import { Loader } from "@googlemaps/js-api-loader";
-
+import { DataPackageInjectionKey } from "@/injections";
+import type { DataPackage } from "@/types";
 import DrawMap from "./DrawMap.vue";
 import PlaceSelector from "./PlaceSelector.vue";
 import DrawingManager from "./DrawingManager.vue";
@@ -10,12 +11,14 @@ const error = ref<string>();
 const loadingApi = ref(false);
 const mapDrawer = ref<InstanceType<typeof DrawMap>>();
 
+const dataPackage = inject(DataPackageInjectionKey, ref<DataPackage>({ drawnAreas: [] }));
+
 const totalArea = computed(() => {
-  return mapDrawer.value?.allPolygons.reduce((acc, cur) => acc + cur.area, 0) ?? 0;
+  return dataPackage.value.drawnAreas.reduce((acc, cur) => acc + cur.area, 0) ?? 0;
 });
 
 const polygonCount = computed(() => {
-  return mapDrawer.value?.allPolygons.length ?? 0;
+  return dataPackage.value.drawnAreas.length ?? 0;
 });
 
 const onPlaceSelect = (placeId?: string) => {

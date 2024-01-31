@@ -19,7 +19,7 @@ const defaultStage: Stage = "Start";
 const emit = defineEmits<{ close: [] }>();
 const currentStage = ref<Stage>(defaultStage);
 
-const dataPackage = ref<DataPackage>({});
+const dataPackage = ref<DataPackage>({ drawnAreas: [] });
 provide(DataPackageInjectionKey, dataPackage);
 
 const exit = () => {

@@ -3,7 +3,9 @@
 import { ref, onMounted, onBeforeUnmount, toRaw } from "vue";
 import { CustomControl, GoogleMap } from "vue3-google-map";
 import GetComment from "../GetComment.vue";
-import type { DrawnArea } from "@/types";
+import type { DataPackage, DrawnArea } from "@/types";
+import { inject } from "vue";
+import { DataPackageInjectionKey } from "@/injections";
 
 const sodSmith: google.maps.LatLngLiteral = { lat: 44.886297901877114, lng: -93.30808521796632 };
 const editablePolygon: google.maps.PolygonOptions = {
@@ -28,7 +30,7 @@ const selectedMode = ref<"cursor" | "draw">("cursor");
 const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
 
 const drawingManager = ref<google.maps.drawing.DrawingManager>();
-const allPolygons = ref<DrawnArea[]>([]);
+const dataPackage = inject(DataPackageInjectionKey, ref<DataPackage>({ drawnAreas: [] }));
 
 const centerOnUser = () => {
   if (!mapRef.value) return;
@@ -71,16 +73,16 @@ const handleNewPolygon = async (newPolygon: google.maps.Polygon) => {
     removePolygon(newDrawnArea);
   });
 
-  allPolygons.value.push(newDrawnArea);
+  dataPackage.value.drawnAreas.push(newDrawnArea);
 };
 
 const removePolygon = (drawnArea: DrawnArea) => {
   toRaw(drawnArea.polygon).setMap(null);
-  allPolygons.value = allPolygons.value.filter((p) => p.polygon.getMap() !== null);
+  dataPackage.value.drawnAreas = dataPackage.value.drawnAreas.filter((p) => p.polygon.getMap() !== null);
 };
 
 const clearAllPolygons = () => {
-  allPolygons.value.forEach(removePolygon);
+  dataPackage.value.drawnAreas.forEach(removePolygon);
 };
 
 const initMap = async () => {
@@ -123,10 +125,10 @@ function setMode(mode: "cursor" | "draw") {
 
   if (mode === "cursor") {
     drawingManager.value.setDrawingMode(null);
-    allPolygons.value.forEach((p) => p.polygon.setOptions(editablePolygon));
+    dataPackage.value.drawnAreas.forEach((p) => p.polygon.setOptions(editablePolygon));
   } else {
     drawingManager.value.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
-    allPolygons.value.forEach((p) => p.polygon.setOptions(staticPolygon));
+    dataPackage.value.drawnAreas.forEach((p) => p.polygon.setOptions(staticPolygon));
   }
 }
 
@@ -147,8 +149,7 @@ defineExpose({
   mapRef,
   centerOnUser,
   centerOnPlace,
-  clearAllPolygons,
-  allPolygons
+  clearAllPolygons
 });
 </script>
 

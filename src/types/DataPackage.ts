@@ -5,5 +5,5 @@ export interface DataPackage {
   email?: string;
   phone?: string;
   desiredCompleteDate?: string;
-  polygons?: DrawnArea[];
+  drawnAreas: DrawnArea[];
 }
