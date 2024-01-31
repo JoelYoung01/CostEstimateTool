@@ -21,7 +21,7 @@ const emit = defineEmits(["confirm", "back"]);
       <v-btn slim variant="text" @click="emit('back')">Back</v-btn>
       <v-spacer />
       <v-btn
-        variant="elevated"
+        variant="flat"
         color="primary"
         class="px-4"
         rounded

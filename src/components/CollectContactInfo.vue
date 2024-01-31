@@ -91,15 +91,7 @@ const { daysFromToday } = useUtilities();
     <div class="d-flex mx-n2">
       <v-btn slim variant="text" @click="emit('back')"> Back </v-btn>
       <v-spacer />
-      <v-btn
-        slim
-        variant="elevated"
-        color="primary"
-        class="px-4"
-        rounded
-        @click="emit('confirm')"
-        :disabled="!validForm"
-      >
+      <v-btn slim variant="flat" color="primary" class="px-4" rounded @click="emit('confirm')" :disabled="!validForm">
         Confirm
       </v-btn>
     </div>

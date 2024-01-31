@@ -68,9 +68,10 @@ defineExpose({
         <v-checkbox v-model="stairsToAccess" hide-details density="compact" label="Stairs to access?" />
         <v-textarea v-model="comments" label="Comment (Optional)" />
       </div>
-      <v-card-actions>
+      <v-card-actions class="mb-3">
         <v-spacer />
-        <v-btn color="primary" variant="elevated" @click="showDialog = false">Submit</v-btn>
+        <v-btn variant="flat" color="primary" class="px-4" rounded @click="showDialog = false">Submit</v-btn>
+        <v-spacer />
       </v-card-actions>
     </v-card>
   </v-dialog>

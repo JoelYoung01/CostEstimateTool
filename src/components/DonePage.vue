@@ -18,7 +18,7 @@ const emit = defineEmits<{ back: []; scheduleCall: [] }>();
     <div class="d-flex mx-n2">
       <v-btn slim variant="text" @click="emit('back')">Back</v-btn>
       <v-spacer />
-      <v-btn variant="elevated" class="px-4" color="primary" rounded @click="emit('scheduleCall')">Done</v-btn>
+      <v-btn variant="flat" class="px-4" color="primary" rounded @click="emit('scheduleCall')">Done</v-btn>
     </div>
   </v-card>
 </template>
