@@ -4,14 +4,37 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: # Allows manual triggering of the workflow
+      inputs: 
+        branch:
+          description: 'Branch to deploy'
+          required: true
+          default: 'main'
+        environment:
+          description: 'Environment to deploy (dev | stage | prod)'
+          required: true
+          default: 'stage'
 
 jobs:
-  Build_and_Upload_to_S3:
+  Setup:
     runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.setEnv.outputs.environment }}
+    steps:
+      - name: Set Environment
+        id: setEnv
+        run: echo "::set-output name=environment::${{ github.event.inputs.environment }}"
+
+  Build_and_Upload_to_S3:
+    needs: Setup
+    runs-on: ubuntu-latest
+    environment: ${{ needs.Setup.outputs.environment }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
