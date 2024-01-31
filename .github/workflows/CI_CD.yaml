@@ -18,19 +18,10 @@ on:
           default: 'stage'
 
 jobs:
-  Setup:
-    runs-on: ubuntu-latest
-    outputs:
-      environment: ${{ steps.setEnv.outputs.environment }}
-    steps:
-      - name: Set Environment
-        id: setEnv
-        run: echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
-
   Build_and_Upload_to_S3:
-    needs: Setup
     runs-on: ubuntu-latest
-    environment: ${{ needs.Setup.outputs.environment }}
+    environment: 
+      name: ${{ inputs.environment }}
 
     steps:
       - name: Checkout code
