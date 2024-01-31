@@ -11,7 +11,9 @@ on:
           required: true
           default: 'main'
         environment:
-          description: 'Environment to deploy (dev | stage | prod)'
+          description: 'Environment to deploy'
+          type: choice
+          options: ['dev', 'stage', 'prod']
           required: true
           default: 'stage'
 
@@ -23,7 +25,7 @@ jobs:
     steps:
       - name: Set Environment
         id: setEnv
-        run: echo "::set-output name=environment::${{ github.event.inputs.environment }}"
+        run: echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
 
   Build_and_Upload_to_S3:
     needs: Setup
@@ -32,7 +34,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.branch }}
 
