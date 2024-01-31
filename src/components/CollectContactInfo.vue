@@ -4,6 +4,8 @@ import { useDisplay } from "vuetify";
 import { inject } from "vue";
 import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
 
+const showCompletionDatePicker = false;
+
 const emit = defineEmits<{
   confirm: [];
   back: [];
@@ -61,6 +63,7 @@ const daysFromToday = (date: Date) => {
         :rules="[required]"
       />
       <v-text-field
+        v-if="showCompletionDatePicker"
         :modelValue="dataPackage.desiredCompleteDate.toDateString()"
         readonly
         prepend-icon="mdi-calendar-month-outline"
