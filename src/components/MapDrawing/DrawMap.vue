@@ -2,11 +2,26 @@
 /// <reference types="google.maps" />
 import { ref, onMounted, onBeforeUnmount, computed, toRaw } from "vue";
 import { CustomControl, GoogleMap } from "vue3-google-map";
+import GetComment from "../GetComment.vue";
 
 const sodSmith: google.maps.LatLngLiteral = { lat: 44.886297901877114, lng: -93.30808521796632 };
+const editablePolygon: google.maps.PolygonOptions = {
+  clickable: true,
+  editable: true,
+  fillColor: "#BCDCF9",
+  strokeColor: "#57ACF9"
+};
+const staticPolygon: google.maps.PolygonOptions = {
+  clickable: false,
+  draggable: false,
+  editable: false,
+  fillColor: "#dbeaf8",
+  strokeColor: "#b3c7da" // Non editable color
+};
 
 const zoom = ref(17);
 const mapRef = ref<InstanceType<typeof GoogleMap>>();
+const commentGetter = ref<InstanceType<typeof GetComment>>();
 const selectedMode = ref<"cursor" | "draw">("cursor");
 
 const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
@@ -14,6 +29,7 @@ const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
 interface DrawnArea {
   polygon: google.maps.Polygon;
   area: number;
+  comments?: string;
 }
 
 const drawingManager = ref<google.maps.drawing.DrawingManager>();
@@ -45,20 +61,23 @@ const centerOnPlace = (place_id: string) => {
   });
 };
 
-const handleNewPolygon = (newPolygon: google.maps.Polygon) => {
+const handleNewPolygon = async (newPolygon: google.maps.Polygon) => {
+  const comments = await commentGetter.value?.getComment();
+
+  if (typeof comments === "undefined") removePolygon({ polygon: newPolygon, area: 0 });
+
   const newDrawnArea: DrawnArea = {
     polygon: newPolygon,
-    area: google.maps.geometry.spherical.computeArea(newPolygon.getPath(), 2.093e7)
+    area: google.maps.geometry.spherical.computeArea(newPolygon.getPath(), 2.093e7),
+    comments
   };
 
   newPolygon.addListener("contextmenu", () => {
-    console.debug("Right clicked");
-    // removePolygon(newDrawnArea);
+    removePolygon(newDrawnArea);
   });
 
   newPolygon.addListener("dblclick", () => {
-    console.debug("Double clicked");
-    // removePolygon(newDrawnArea);
+    removePolygon(newDrawnArea);
   });
 
   allPolygons.value.push(newDrawnArea);
@@ -78,25 +97,21 @@ const initMap = async () => {
 
   // Wait for maps api to be loaded
   while (!mapRef.value?.ready || !mapRef.value?.map || !google?.maps?.drawing) {
-    console.debug("waiting for map to be ready");
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   const drawOptions: google.maps.drawing.DrawingManagerOptions = {
-    drawingMode: google.maps.drawing.OverlayType.POLYGON,
+    drawingMode: undefined,
     drawingControl: false,
     drawingControlOptions: {
       position: google.maps.ControlPosition.TOP_CENTER,
       drawingModes: [google.maps.drawing.OverlayType.POLYGON]
     },
     polygonOptions: {
-      clickable: true,
+      ...staticPolygon,
       draggable: false,
-      editable: true,
-      fillColor: "#BCDCF9",
       fillOpacity: 0.5,
       geodesic: false,
-      strokeColor: "#57ACF9",
       strokeOpacity: 1,
       strokePosition: google.maps.StrokePosition.CENTER,
       strokeWeight: 5,
@@ -117,8 +132,10 @@ function setMode(mode: "cursor" | "draw") {
 
   if (mode === "cursor") {
     drawingManager.value.setDrawingMode(null);
+    allPolygons.value.forEach((p) => p.polygon.setOptions(editablePolygon));
   } else {
     drawingManager.value.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
+    allPolygons.value.forEach((p) => p.polygon.setOptions(staticPolygon));
   }
 }
 
@@ -146,6 +163,7 @@ defineExpose({
 </script>
 
 <template>
+  <GetComment ref="commentGetter" />
   <GoogleMap
     ref="mapRef"
     style="height: 30vh"

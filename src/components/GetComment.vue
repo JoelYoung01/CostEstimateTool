@@ -10,27 +10,23 @@ const eventTarget = new EventTarget();
 async function getComment() {
   showDialog.value = true;
 
-  return await waitForEvent(eventTarget, "comment");
+  return await waitForComment(eventTarget, "comment");
 }
 
-function waitForEvent(eventTarget: EventTarget, eventName: string) {
-  return new Promise((resolve) => {
+function waitForComment(eventTarget: EventTarget, eventName: string) {
+  return new Promise<string | undefined>((resolve) => {
     const listener = (event: any) => {
       eventTarget.removeEventListener(eventName, listener);
-      resolve(event);
+      resolve(event.detail);
     };
     eventTarget.addEventListener(eventName, listener);
   });
 }
 
-function cancel() {
-  comment.value = undefined;
-  showDialog.value = false;
-}
-
 watch(showDialog, (newVal) => {
   if (!newVal) {
     eventTarget.dispatchEvent(new CustomEvent("comment", { detail: comment.value }));
+    comment.value = undefined;
   }
 });
 
@@ -40,15 +36,15 @@ defineExpose({
 </script>
 
 <template>
-  <v-dialog v-model="showDialog" activator="parent" width="auto">
+  <v-dialog v-model="showDialog" width="auto">
     <v-card>
-      <v-card-title>Add a comment about this area (Optional)</v-card-title>
+      <div class="px-6 pt-3">Add a comment about this area (Optional)</div>
       <v-card-text>
         <v-textarea v-model="comment" label="Comment" />
       </v-card-text>
       <v-card-actions>
-        <v-btn @click="cancel()">Cancel</v-btn>
-        <v-btn @click="showDialog = false">Submit</v-btn>
+        <v-spacer />
+        <v-btn color="primary" variant="elevated" @click="showDialog = false">Submit</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
