@@ -4,6 +4,7 @@ import { useDisplay } from "vuetify";
 import { inject } from "vue";
 import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
 
+// Hide the completion date picker for now, until we integrate with the heatmap calendar idea
 const showCompletionDatePicker = false;
 
 const emit = defineEmits<{
