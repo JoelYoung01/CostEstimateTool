@@ -60,10 +60,11 @@ const initSearchService = async () => {
   let retryCount = 0;
   try {
     while (typeof google === "undefined" || !google?.maps?.places) {
-      if (retryCount++ > 10) {
+      if (retryCount++ > 20) {
+        // Waited 10 seconds
         throw new Error("Timed out waiting for Google Maps API to load.");
       } else {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 500));
       }
     }
     autocompleteService = new google.maps.places.AutocompleteService();

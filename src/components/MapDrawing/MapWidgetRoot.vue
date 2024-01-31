@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Loader } from "@googlemaps/js-api-loader";
 
 import DrawMap from "./DrawMap.vue";
@@ -9,6 +9,14 @@ import DrawingManager from "./DrawingManager.vue";
 const error = ref<string>();
 const loadingApi = ref(false);
 const mapDrawer = ref<InstanceType<typeof DrawMap>>();
+
+const totalArea = computed(() => {
+  return mapDrawer.value?.allPolygons.reduce((acc, cur) => acc + cur.area, 0) ?? 0;
+});
+
+const polygonCount = computed(() => {
+  return mapDrawer.value?.allPolygons.length ?? 0;
+});
 
 const onPlaceSelect = (placeId?: string) => {
   if (!placeId) return;
@@ -49,8 +57,8 @@ initGoogleApi();
     </v-alert>
     <DrawMap v-else ref="mapDrawer" />
     <DrawingManager
-      :total-area="mapDrawer?.totalArea ?? 0"
-      :disabled-clear-all="!mapDrawer || mapDrawer.polygonCount === 0"
+      :total-area="totalArea"
+      :disabled-clear-all="polygonCount === 0"
       @center-on-user="mapDrawer?.centerOnUser()"
       @clear-all-polygons="mapDrawer?.clearAllPolygons()"
     />

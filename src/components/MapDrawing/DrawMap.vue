@@ -1,8 +1,9 @@
 <script setup lang="ts">
 /// <reference types="google.maps" />
-import { ref, onMounted, onBeforeUnmount, computed, toRaw } from "vue";
+import { ref, onMounted, onBeforeUnmount, toRaw } from "vue";
 import { CustomControl, GoogleMap } from "vue3-google-map";
 import GetComment from "../GetComment.vue";
+import type { DrawnArea } from "@/types";
 
 const sodSmith: google.maps.LatLngLiteral = { lat: 44.886297901877114, lng: -93.30808521796632 };
 const editablePolygon: google.maps.PolygonOptions = {
@@ -26,18 +27,8 @@ const selectedMode = ref<"cursor" | "draw">("cursor");
 
 const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
 
-interface DrawnArea {
-  polygon: google.maps.Polygon;
-  area: number;
-  comments?: string;
-}
-
 const drawingManager = ref<google.maps.drawing.DrawingManager>();
 const allPolygons = ref<DrawnArea[]>([]);
-
-const totalArea = computed(() => {
-  return allPolygons.value.reduce((acc, cur) => acc + cur.area, 0);
-});
 
 const centerOnUser = () => {
   if (!mapRef.value) return;
@@ -157,8 +148,7 @@ defineExpose({
   centerOnUser,
   centerOnPlace,
   clearAllPolygons,
-  totalArea,
-  polygonCount: computed(() => allPolygons.value.length)
+  allPolygons
 });
 </script>
 
