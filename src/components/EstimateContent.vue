@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { type ContactInfo } from "@/types";
+import type { DataPackage } from "@/types";
 import StartPage from "./StartPage.vue";
 import DrawTool from "./DrawTool.vue";
 import CollectContactInfo from "./CollectContactInfo.vue";
@@ -8,6 +8,8 @@ import EstimateResult from "./EstimateResult.vue";
 import SendVideo from "./SendVideo.vue";
 import DonePage from "./DonePage.vue";
 import { useDisplay } from "vuetify";
+import { provide } from "vue";
+import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
 
 const { mobile } = useDisplay();
 
@@ -17,14 +19,12 @@ const defaultStage: Stage = "Start";
 const emit = defineEmits<{ close: [] }>();
 const currentStage = ref<Stage>(defaultStage);
 
+const dataPackage = ref<DataPackage>(DefaultDataPackage);
+provide(DataPackageInjectionKey, dataPackage);
+
 const exit = () => {
   currentStage.value = defaultStage;
   emit("close");
-};
-
-const addContactInfo = (contactInfo: ContactInfo) => {
-  console.log(contactInfo);
-  currentStage.value = "Estimate";
 };
 </script>
 
@@ -33,7 +33,7 @@ const addContactInfo = (contactInfo: ContactInfo) => {
     <v-card-title class="d-flex justify-end">
       <v-btn size="small" variant="text" icon="mdi-close" @click="exit" />
     </v-card-title>
-    <v-window v-model="currentStage" rounded class="px-2 pb-lg-8 pb-4">
+    <v-window v-model="currentStage" rounded :touch="{ left: () => null, right: () => null }" class="px-2 pb-lg-8 pb-4">
       <v-window-item value="Start">
         <StartPage @self-guided="currentStage = 'Draw'" @schedule-call="currentStage = 'ScheduleCall'" />
       </v-window-item>
@@ -43,16 +43,11 @@ const addContactInfo = (contactInfo: ContactInfo) => {
       </v-window-item>
 
       <v-window-item value="ContactInfo">
-        <CollectContactInfo @back="currentStage = 'Draw'" @confirm="addContactInfo" />
+        <CollectContactInfo @back="currentStage = 'Draw'" @confirm="currentStage = 'Estimate'" />
       </v-window-item>
 
       <v-window-item value="Estimate">
-        <EstimateResult
-          :squareFootage="605"
-          :daysUntilCompletion="21"
-          @back="currentStage = 'ContactInfo'"
-          @continue="currentStage = 'SendVideo'"
-        />
+        <EstimateResult @back="currentStage = 'ContactInfo'" @continue="currentStage = 'SendVideo'" />
       </v-window-item>
 
       <v-window-item value="SendVideo">
@@ -62,7 +57,7 @@ const addContactInfo = (contactInfo: ContactInfo) => {
       <v-window-item value="ConfirmPhone"> <div></div> </v-window-item>
 
       <v-window-item value="Done">
-        <DonePage @back="currentStage = 'SendVideo'" @schedule-call="currentStage = 'ScheduleCall'" />
+        <DonePage @back="currentStage = 'SendVideo'" @schedule-call="exit()" />
       </v-window-item>
 
       <v-window-item value="ScheduleCall">
