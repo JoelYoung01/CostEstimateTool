@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { useDisplay } from "vuetify";
 import MapWidgetRoot from "./MapDrawing/MapWidgetRoot.vue";
+import { inject, ref } from "vue";
+import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
 
 const { mobile } = useDisplay();
+const dataPackage = inject(DataPackageInjectionKey, ref(DefaultDataPackage));
 
-const emit = defineEmits<{
-  confirm: [data: any];
-  back: [];
-}>();
-
-const mapData = ref<any>(null);
+const emit = defineEmits(["confirm", "back"]);
 </script>
 
 <template>
@@ -23,7 +20,9 @@ const mapData = ref<any>(null);
     <div class="d-flex mx-n2">
       <v-btn slim variant="text" @click="emit('back')">Back</v-btn>
       <v-spacer />
-      <v-btn slim variant="text" @click="emit('confirm', mapData)">Confirm</v-btn>
+      <v-btn :disabled="dataPackage.drawnAreas.length === 0" slim variant="text" @click="emit('confirm')">
+        Confirm
+      </v-btn>
     </div>
   </v-card>
 </template>
