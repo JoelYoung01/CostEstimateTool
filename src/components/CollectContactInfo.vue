@@ -1,25 +1,15 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { ContactInfo } from "@/types";
 import { useDisplay } from "vuetify";
+import { inject } from "vue";
+import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
 
 const emit = defineEmits<{
-  confirm: [data: ContactInfo];
+  confirm: [];
   back: [];
 }>();
 
-const nextWeek = () => {
-  const date = new Date();
-  date.setDate(date.getDate() + 7);
-  return date;
-};
-
-const contactInfo = ref<ContactInfo>({
-  name: "",
-  email: "",
-  phone: "",
-  desiredCompletionDate: nextWeek()
-});
+const dataPackage = inject(DataPackageInjectionKey, ref(DefaultDataPackage));
 
 const { mobile } = useDisplay();
 
@@ -45,7 +35,7 @@ const daysFromToday = (date: Date) => {
 
     <v-form v-model="validForm">
       <v-text-field
-        v-model="contactInfo.name"
+        v-model="dataPackage.name"
         prepend-icon="mdi-account"
         label="Name"
         variant="outlined"
@@ -53,7 +43,7 @@ const daysFromToday = (date: Date) => {
         :rules="[required]"
       />
       <v-text-field
-        v-model="contactInfo.email"
+        v-model="dataPackage.email"
         prepend-icon="mdi-email"
         validate-on="blur"
         label="Email"
@@ -63,7 +53,7 @@ const daysFromToday = (date: Date) => {
         :rules="[required, isEmail]"
       />
       <v-text-field
-        v-model="contactInfo.phone"
+        v-model="dataPackage.phone"
         prepend-icon="mdi-phone"
         label="Phone"
         variant="outlined"
@@ -71,7 +61,7 @@ const daysFromToday = (date: Date) => {
         :rules="[required]"
       />
       <v-text-field
-        :modelValue="contactInfo.desiredCompletionDate.toDateString()"
+        :modelValue="dataPackage.desiredCompleteDate.toDateString()"
         readonly
         prepend-icon="mdi-calendar-month-outline"
         label="Desired Completion Date"
@@ -81,7 +71,7 @@ const daysFromToday = (date: Date) => {
       >
         <v-menu v-model="showDatePicker" activator="parent" :close-on-content-click="false">
           <v-date-picker
-            v-model="contactInfo.desiredCompletionDate"
+            v-model="dataPackage.desiredCompleteDate"
             :min="new Date()"
             landscape
             @update:modelValue="showDatePicker = false"
@@ -90,8 +80,8 @@ const daysFromToday = (date: Date) => {
 
         <template #append-inner>
           <span style="font-size: 12px; white-space: nowrap">
-            In {{ daysFromToday(contactInfo.desiredCompletionDate) }} day{{
-              daysFromToday(contactInfo.desiredCompletionDate) === 1 ? "" : "s"
+            In {{ daysFromToday(dataPackage.desiredCompleteDate) }} day{{
+              daysFromToday(dataPackage.desiredCompleteDate) === 1 ? "" : "s"
             }}
           </span>
         </template>
@@ -101,7 +91,7 @@ const daysFromToday = (date: Date) => {
     <div class="d-flex mx-n2">
       <v-btn slim variant="text" @click="emit('back')"> Back </v-btn>
       <v-spacer />
-      <v-btn slim variant="text" @click="emit('confirm', contactInfo)" :disabled="!validForm"> Confirm </v-btn>
+      <v-btn slim variant="text" @click="emit('confirm')" :disabled="!validForm"> Confirm </v-btn>
     </div>
   </v-card>
 </template>

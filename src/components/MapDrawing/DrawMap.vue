@@ -5,7 +5,7 @@ import { CustomControl, GoogleMap } from "vue3-google-map";
 import GetComment from "../GetComment.vue";
 import type { DataPackage, DrawnArea } from "@/types";
 import { inject } from "vue";
-import { DataPackageInjectionKey } from "@/injections";
+import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
 
 const sodSmith: google.maps.LatLngLiteral = { lat: 44.886297901877114, lng: -93.30808521796632 };
 const editablePolygon: google.maps.PolygonOptions = {
@@ -30,7 +30,7 @@ const selectedMode = ref<"cursor" | "draw">("cursor");
 const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
 
 const drawingManager = ref<google.maps.drawing.DrawingManager>();
-const dataPackage = inject(DataPackageInjectionKey, ref<DataPackage>({ drawnAreas: [] }));
+const dataPackage = inject(DataPackageInjectionKey, ref<DataPackage>(DefaultDataPackage));
 
 const centerOnUser = () => {
   if (!mapRef.value) return;

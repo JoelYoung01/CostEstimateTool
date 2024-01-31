@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, inject } from "vue";
 import { Loader } from "@googlemaps/js-api-loader";
-import { DataPackageInjectionKey } from "@/injections";
+import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
 import type { DataPackage } from "@/types";
 import DrawMap from "./DrawMap.vue";
 import PlaceSelector from "./PlaceSelector.vue";
@@ -11,7 +11,7 @@ const error = ref<string>();
 const loadingApi = ref(false);
 const mapDrawer = ref<InstanceType<typeof DrawMap>>();
 
-const dataPackage = inject(DataPackageInjectionKey, ref<DataPackage>({ drawnAreas: [] }));
+const dataPackage = inject(DataPackageInjectionKey, ref<DataPackage>(DefaultDataPackage));
 
 const totalArea = computed(() => {
   return dataPackage.value.drawnAreas.reduce((acc, cur) => acc + cur.area, 0) ?? 0;

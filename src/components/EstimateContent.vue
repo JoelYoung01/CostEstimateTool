@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { DataPackage, ContactInfo } from "@/types";
+import type { DataPackage } from "@/types";
 import StartPage from "./StartPage.vue";
 import DrawTool from "./DrawTool.vue";
 import CollectContactInfo from "./CollectContactInfo.vue";
@@ -9,7 +9,7 @@ import SendVideo from "./SendVideo.vue";
 import DonePage from "./DonePage.vue";
 import { useDisplay } from "vuetify";
 import { provide } from "vue";
-import { DataPackageInjectionKey } from "@/injections";
+import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
 
 const { mobile } = useDisplay();
 
@@ -19,17 +19,12 @@ const defaultStage: Stage = "Start";
 const emit = defineEmits<{ close: [] }>();
 const currentStage = ref<Stage>(defaultStage);
 
-const dataPackage = ref<DataPackage>({ drawnAreas: [] });
+const dataPackage = ref<DataPackage>(DefaultDataPackage);
 provide(DataPackageInjectionKey, dataPackage);
 
 const exit = () => {
   currentStage.value = defaultStage;
   emit("close");
-};
-
-const addContactInfo = (contactInfo: ContactInfo) => {
-  console.log(contactInfo);
-  currentStage.value = "Estimate";
 };
 </script>
 
@@ -48,7 +43,7 @@ const addContactInfo = (contactInfo: ContactInfo) => {
       </v-window-item>
 
       <v-window-item value="ContactInfo">
-        <CollectContactInfo @back="currentStage = 'Draw'" @confirm="addContactInfo" />
+        <CollectContactInfo @back="currentStage = 'Draw'" @confirm="currentStage = 'Estimate'" />
       </v-window-item>
 
       <v-window-item value="Estimate">
