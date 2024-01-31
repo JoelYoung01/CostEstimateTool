@@ -47,12 +47,7 @@ const exit = () => {
       </v-window-item>
 
       <v-window-item value="Estimate">
-        <EstimateResult
-          :squareFootage="605"
-          :daysUntilCompletion="21"
-          @back="currentStage = 'ContactInfo'"
-          @continue="currentStage = 'SendVideo'"
-        />
+        <EstimateResult @back="currentStage = 'ContactInfo'" @continue="currentStage = 'SendVideo'" />
       </v-window-item>
 
       <v-window-item value="SendVideo">

@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { useDisplay } from "vuetify";
 import { inject } from "vue";
 import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
+import { useUtilities } from "@/composables";
 
 // Hide the completion date picker for now, until we integrate with the heatmap calendar idea
 const showCompletionDatePicker = false;
@@ -22,12 +23,7 @@ const showDatePicker = ref(false);
 const required = (value: string) => !!value || "Required";
 const isEmail = (value: string) => /.+@.+\..+/.test(value) || "Invalid email";
 
-const daysFromToday = (date: Date) => {
-  const today = new Date();
-  const diffTime = Math.abs(date.getTime() - today.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays;
-};
+const { daysFromToday } = useUtilities();
 </script>
 
 <template>
