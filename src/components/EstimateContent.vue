@@ -57,7 +57,7 @@ const exit = () => {
       <v-window-item value="ConfirmPhone"> <div></div> </v-window-item>
 
       <v-window-item value="Done">
-        <DonePage @back="currentStage = 'SendVideo'" @schedule-call="currentStage = 'ScheduleCall'" />
+        <DonePage @back="currentStage = 'SendVideo'" @schedule-call="exit()" />
       </v-window-item>
 
       <v-window-item value="ScheduleCall">
