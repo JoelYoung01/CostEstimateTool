@@ -37,6 +37,8 @@ jobs:
           pnpm install
 
       - name: Build project
+        env:
+          VITE_GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
         run: pnpm build
 
       - name: Configure AWS credentials

@@ -1,10 +1,10 @@
 # Cost Estimate Tool
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a tool that helps users estimate the cost of a sod installation. It is built with Vue 3 and Vite.
 
 ## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + Takeover mode (see below)
 
 ## Type Support for `.vue` Imports in TS
 
