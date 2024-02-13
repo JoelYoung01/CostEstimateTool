@@ -8,6 +8,19 @@ on:
           type: string
           required: true
           default: 'stage'
+    secrets:
+      GOOGLE_API_KEY:
+        description: 'Google API Key'
+        required: true
+      AWS_ACCESS_KEY_ID:
+        description: 'AWS Access Key ID'
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        description: 'AWS Secret Access Key'
+        required: true
+      S3_BUCKET:
+        description: 'S3 Bucket'
+        required: true
 
 jobs:
   DeployToS3:
