@@ -1,0 +1,18 @@
+name: Manual Deployment
+run-name: Manual Deployment started by ${{ github.actor }}
+
+on:
+  workflow_dispatch:
+      inputs: 
+        environment:
+          description: 'Environment to deploy'
+          type: choice
+          options: ['dev', 'stage', 'production']
+          required: true
+          default: 'stage'
+
+jobs:
+  Deploy_to_environment:
+    uses: ./.github/workflows/Deploy.yaml
+    with:
+      environment: ${{ github.event.inputs.environment }}

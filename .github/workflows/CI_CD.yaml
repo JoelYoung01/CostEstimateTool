@@ -1,52 +1,12 @@
-name: Build and Upload to S3
+name: Deploy to PROD
 
 on:
-  workflow_dispatch:
-      inputs: 
-        branch:
-          description: 'Branch to deploy'
-          required: true
-          default: 'main'
-        environment:
-          description: 'Environment to deploy'
-          type: choice
-          options: ['dev', 'stage', 'prod']
-          required: true
-          default: 'stage'
+  push:
+    branches:
+      - main
 
 jobs:
-  Build_and_Upload_to_S3:
-    runs-on: ubuntu-latest
-    environment: 
-      name: ${{ inputs.environment }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.branch }}
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install Dependencies
-        run: |
-          npm install -g pnpm
-          pnpm install
-
-      - name: Build project
-        env:
-          VITE_GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-        run: pnpm build
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
-
-      - name: Upload to S3
-        run: aws s3 sync ./dist s3://${{ secrets.S3_BUCKET }}/cost-estimate-tool --delete
+  Deploy_to_environment:
+    uses: ./.github/workflows/Deploy.yaml
+    with:
+      environment: production
