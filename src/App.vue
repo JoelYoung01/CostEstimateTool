@@ -3,6 +3,8 @@ import { ref } from "vue";
 import EstimateContent from "@/components/EstimateContent.vue";
 
 const showDialog = ref(false);
+
+console.debug("Base URL: ", import.meta.env.BASE_URL);
 </script>
 
 <template>
