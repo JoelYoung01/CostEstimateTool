@@ -20,7 +20,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         entryFileNames: "index.js",
-        format: "iife",
         compact: true
       }
     }
