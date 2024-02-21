@@ -111,7 +111,7 @@ const initMap = async () => {
       draggable: false,
       fillColor: currentTheme.value.colors.secondary,
       strokeColor: "black",
-      fillOpacity: 0.5,
+      fillOpacity: 0.33,
       geodesic: false,
       strokeOpacity: 1,
       strokePosition: google.maps.StrokePosition.CENTER,
