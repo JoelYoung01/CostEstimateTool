@@ -11,14 +11,12 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="d-flex align-center py-2">
+  <v-card class="d-flex align-center pl-3" style="font-size: 1rem">
     <div>Total Area:</div>
     <div>
       <v-chip class="mx-2">{{ Math.max(0, Math.round(totalArea)).toLocaleString() }}</v-chip>
     </div>
-    <div>SQFT</div>
-
-    <v-spacer />
+    <div class="mr-3">SQFT</div>
 
     <v-btn variant="text" icon @click="emit('center-on-user')">
       <v-icon icon="mdi-crosshairs-gps" />
@@ -29,5 +27,5 @@ const emit = defineEmits<{
       <v-icon icon="mdi-layers-remove" />
       <v-tooltip activator="parent" location="bottom"> Clear all areas </v-tooltip>
     </v-btn>
-  </div>
+  </v-card>
 </template>

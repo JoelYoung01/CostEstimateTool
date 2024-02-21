@@ -1,11 +1,17 @@
 <script setup lang="ts">
 /// <reference types="google.maps" />
-import { ref, onMounted, onBeforeUnmount, toRaw } from "vue";
+import { ref, onMounted, onBeforeUnmount, toRaw, inject, computed } from "vue";
 import { CustomControl, GoogleMap } from "vue3-google-map";
 import GetComment from "../GetComment.vue";
+import DrawingManager from "./DrawingManager.vue";
+import PlaceSelector from "./PlaceSelector.vue";
 import type { DataPackage, DrawnArea } from "@/types";
-import { inject } from "vue";
 import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
+
+interface Props {
+  error?: string;
+}
+defineProps<Props>();
 
 const sodSmith: google.maps.LatLngLiteral = { lat: 44.886297901877114, lng: -93.30808521796632 };
 const editablePolygon: google.maps.PolygonOptions = {
@@ -32,6 +38,13 @@ const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
 const drawingManager = ref<google.maps.drawing.DrawingManager>();
 const dataPackage = inject(DataPackageInjectionKey, ref<DataPackage>(DefaultDataPackage));
 
+const totalArea = computed(() => {
+  return dataPackage.value.drawnAreas.reduce((acc, cur) => acc + cur.area, 0) ?? 0;
+});
+const polygonCount = computed(() => {
+  return dataPackage.value.drawnAreas.length ?? 0;
+});
+
 const centerOnUser = () => {
   if (!mapRef.value) return;
 
@@ -43,7 +56,7 @@ const centerOnUser = () => {
   });
 };
 
-const centerOnPlace = (place_id: string) => {
+const centerOnPlace = (place_id?: string) => {
   if (!place_id || !mapRef.value?.map) return;
 
   const service = new google.maps.places.PlacesService(mapRef.value.map);
@@ -147,20 +160,13 @@ onBeforeUnmount(() => {
     drawingManager.value = undefined;
   }
 });
-
-defineExpose({
-  mapRef,
-  centerOnUser,
-  centerOnPlace,
-  clearAllPolygons
-});
 </script>
 
 <template>
   <GetComment ref="commentGetter" />
   <GoogleMap
     ref="mapRef"
-    style="height: 30vh"
+    style="height: calc(100vh - 200px); width: calc(100vw - 125px)"
     :background-color="$vuetify.theme.current.colors.background"
     :api-key="apiKey"
     :center="sodSmith"
@@ -177,6 +183,9 @@ defineExpose({
     @dblclick.stop
   >
     <CustomControl position="TOP_CENTER" class="mt-1">
+      <PlaceSelector :disabled="!!error" @place-selected="centerOnPlace" />
+    </CustomControl>
+    <CustomControl position="TOP_RIGHT" class="mt-1 mr-1">
       <v-btn-toggle v-model="selectedMode" mandatory>
         <v-btn
           value="cursor"
@@ -194,9 +203,18 @@ defineExpose({
         />
       </v-btn-toggle>
     </CustomControl>
-    <CustomControl position="RIGHT_BOTTOM" class="d-flex flex-column ma-1">
+    <CustomControl position="RIGHT_CENTER" class="d-flex flex-column ma-1">
       <v-btn size="small" icon="mdi-plus" :disabled="zoom >= 21" @click="zoom++" class="rounded-t-lg rounded-b-0" />
       <v-btn size="small" icon="mdi-minus" :disabled="zoom <= 16" @click="zoom--" class="rounded-b-lg rounded-t-0" />
+    </CustomControl>
+
+    <CustomControl position="BOTTOM_CENTER" class="mb-1">
+      <DrawingManager
+        :total-area="totalArea"
+        :disabled-clear-all="polygonCount === 0"
+        @center-on-user="centerOnUser()"
+        @clear-all-polygons="clearAllPolygons()"
+      />
     </CustomControl>
   </GoogleMap>
 </template>

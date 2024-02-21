@@ -1,30 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, inject } from "vue";
+import { ref } from "vue";
 import { Loader } from "@googlemaps/js-api-loader";
-import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
-import type { DataPackage } from "@/types";
 import DrawMap from "./DrawMap.vue";
-import PlaceSelector from "./PlaceSelector.vue";
-import DrawingManager from "./DrawingManager.vue";
 
 const error = ref<string>();
 const loadingApi = ref(false);
-const mapDrawer = ref<InstanceType<typeof DrawMap>>();
-
-const dataPackage = inject(DataPackageInjectionKey, ref<DataPackage>(DefaultDataPackage));
-
-const totalArea = computed(() => {
-  return dataPackage.value.drawnAreas.reduce((acc, cur) => acc + cur.area, 0) ?? 0;
-});
-
-const polygonCount = computed(() => {
-  return dataPackage.value.drawnAreas.length ?? 0;
-});
-
-const onPlaceSelect = (placeId?: string) => {
-  if (!placeId) return;
-  mapDrawer.value?.centerOnPlace(placeId);
-};
 
 const initGoogleApi = async () => {
   error.value = undefined;
@@ -53,17 +33,10 @@ initGoogleApi();
 <template>
   <div>
     {{ loadingApi ? " - Loading..." : "" }}
-    <PlaceSelector :disabled="!!error" @place-selected="onPlaceSelect" />
     <v-alert v-if="error" class="mb-10" type="error">
       {{ error }}
       <v-btn variant="text" @click="initGoogleApi">Retry</v-btn>
     </v-alert>
-    <DrawMap v-else ref="mapDrawer" />
-    <DrawingManager
-      :total-area="totalArea"
-      :disabled-clear-all="polygonCount === 0"
-      @center-on-user="mapDrawer?.centerOnUser()"
-      @clear-all-polygons="mapDrawer?.clearAllPolygons()"
-    />
+    <DrawMap v-else />
   </div>
 </template>

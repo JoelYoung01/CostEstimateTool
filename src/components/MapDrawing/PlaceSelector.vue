@@ -2,12 +2,16 @@
 import { watch } from "vue";
 import { ref } from "vue";
 
+interface Props {
+  disabled?: boolean;
+}
+
 interface PlaceSelectItem {
   title: string;
   placeObject: google.maps.places.AutocompletePrediction;
 }
 
-defineProps<{ disabled?: boolean }>();
+defineProps<Props>();
 
 defineEmits<{
   "place-selected": [placeId: string | undefined];
@@ -19,6 +23,7 @@ const apiLoadError = ref<string>();
 const searchText = ref<string>();
 const loadingResults = ref(false);
 const searchResults = ref<PlaceSelectItem[]>([]);
+let timerId: number | undefined;
 
 const loadResults = async (query: string) => {
   loadingResults.value = true;
@@ -40,13 +45,23 @@ const loadResults = async (query: string) => {
   loadingResults.value = false;
 };
 
+const loadResultsDebounced = (query: string) => {
+  // cancel pending call
+  clearTimeout(timerId);
+
+  // delay new call 500ms
+  timerId = setTimeout(() => {
+    loadResults(query);
+  }, 1000);
+};
+
 watch(searchText, async (newVal) => {
   if (!newVal) {
     searchResults.value = [];
     return;
   }
 
-  await loadResults(newVal);
+  loadResultsDebounced(newVal);
 });
 
 const initSearchService = async () => {
@@ -83,6 +98,7 @@ initSearchService();
     :disabled="disabled || !!apiLoadError"
     :items="searchResults"
     :loading="loadingResults"
+    style="min-width: 250px"
     placeholder="Jump to a location..."
     prepend-inner-icon="mdi-magnify"
     variant="solo"
