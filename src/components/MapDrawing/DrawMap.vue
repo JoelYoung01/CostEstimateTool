@@ -7,26 +7,15 @@ import DrawingManager from "./DrawingManager.vue";
 import PlaceSelector from "./PlaceSelector.vue";
 import type { DataPackage, DrawnArea } from "@/types";
 import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
+import { useTheme } from "vuetify";
 
 interface Props {
   error?: string;
 }
 defineProps<Props>();
+const { current: currentTheme } = useTheme();
 
 const sodSmith: google.maps.LatLngLiteral = { lat: 44.886297901877114, lng: -93.30808521796632 };
-const editablePolygon: google.maps.PolygonOptions = {
-  clickable: true,
-  editable: true,
-  fillColor: "#BCDCF9",
-  strokeColor: "#57ACF9"
-};
-const staticPolygon: google.maps.PolygonOptions = {
-  clickable: false,
-  draggable: false,
-  editable: false,
-  fillColor: "#dbeaf8",
-  strokeColor: "#b3c7da" // Non editable color
-};
 
 const zoom = ref(17);
 const mapRef = ref<InstanceType<typeof GoogleMap>>();
@@ -117,13 +106,16 @@ const initMap = async () => {
       drawingModes: [google.maps.drawing.OverlayType.POLYGON]
     },
     polygonOptions: {
-      ...staticPolygon,
+      clickable: true,
+      editable: true,
       draggable: false,
+      fillColor: currentTheme.value.colors.secondary,
+      strokeColor: "black",
       fillOpacity: 0.5,
       geodesic: false,
       strokeOpacity: 1,
       strokePosition: google.maps.StrokePosition.CENTER,
-      strokeWeight: 5,
+      strokeWeight: 3,
       visible: true,
       zIndex: 1
     }
@@ -141,10 +133,10 @@ function setMode(mode: "cursor" | "draw") {
 
   if (mode === "cursor") {
     drawingManager.value.setDrawingMode(null);
-    dataPackage.value.drawnAreas.forEach((p) => p.polygon.setOptions(editablePolygon));
+    // dataPackage.value.drawnAreas.forEach((p) => p.polygon.setOptions(editablePolygon));
   } else {
     drawingManager.value.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
-    dataPackage.value.drawnAreas.forEach((p) => p.polygon.setOptions(staticPolygon));
+    // dataPackage.value.drawnAreas.forEach((p) => p.polygon.setOptions(staticPolygon));
   }
 }
 
