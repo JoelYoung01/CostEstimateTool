@@ -49,8 +49,8 @@ const loadResultsDebounced = (query: string) => {
   // cancel pending call
   clearTimeout(timerId);
 
-  // delay new call 500ms
-  timerId = setTimeout(() => {
+  // delay new call 500ms (use `window.` to avoid type conflicts with NodeJS setTimeout)
+  timerId = window.setTimeout(() => {
     loadResults(query);
   }, 1000);
 };
