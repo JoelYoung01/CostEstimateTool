@@ -179,7 +179,6 @@ onBeforeUnmount(() => {
     disable-double-click-zoom
     map-type-id="satellite"
     disable-default-ui
-    fullscreen-control
     @dblclick.stop
   >
     <CustomControl position="TOP_CENTER" class="mt-1">
