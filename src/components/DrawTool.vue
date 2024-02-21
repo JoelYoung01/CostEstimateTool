@@ -12,7 +12,7 @@ const emit = defineEmits(["confirm", "back"]);
   <v-card flat class="px-lg-10 px-4">
     <MapWidgetRoot />
 
-    <div class="d-flex mx-n2">
+    <div class="d-flex mx-n2 mt-4">
       <v-btn slim variant="text" @click="emit('back')">Back</v-btn>
       <v-spacer />
       <v-btn
