@@ -6,6 +6,7 @@ import GetComment from "../GetComment.vue";
 import DrawingManager from "./DrawingManager.vue";
 import PlaceSelector from "./PlaceSelector.vue";
 import CompassControl from "./CompassControl.vue";
+import DrawingGuide from "./DrawingGuide.vue";
 import type { DataPackage, DrawnArea } from "@/types";
 import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
 import { useTheme } from "vuetify";
@@ -174,11 +175,11 @@ onBeforeUnmount(() => {
     disable-default-ui
     @dblclick.stop
   >
-    <CustomControl position="TOP_CENTER" class="mt-1">
+    <CustomControl position="TOP_CENTER" class="ma-1">
       <PlaceSelector :disabled="!!error" @place-selected="centerOnPlace" />
     </CustomControl>
 
-    <CustomControl position="TOP_RIGHT" class="mt-1 mr-1">
+    <CustomControl position="TOP_RIGHT" class="ma-1">
       <v-btn-toggle v-model="selectedMode" mandatory>
         <v-btn
           value="cursor"
@@ -202,7 +203,7 @@ onBeforeUnmount(() => {
       <v-btn size="small" icon="mdi-minus" :disabled="zoom <= 16" @click="zoom--" class="rounded-b-lg rounded-t-0" />
     </CustomControl>
 
-    <CustomControl position="BOTTOM_CENTER" class="mb-1">
+    <CustomControl position="BOTTOM_CENTER" class="ma-1">
       <DrawingManager
         :total-area="totalArea"
         :disabled-clear-all="polygonCount === 0"
@@ -211,8 +212,12 @@ onBeforeUnmount(() => {
       />
     </CustomControl>
 
-    <CustomControl position="RIGHT_BOTTOM" class="mb-1 mr-1">
+    <CustomControl position="RIGHT_BOTTOM" class="ma-1">
       <CompassControl :angle="0" />
+    </CustomControl>
+
+    <CustomControl position="LEFT_TOP" class="ma-1">
+      <DrawingGuide />
     </CustomControl>
   </GoogleMap>
 </template>
