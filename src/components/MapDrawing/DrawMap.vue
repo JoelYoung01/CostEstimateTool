@@ -5,6 +5,7 @@ import { CustomControl, GoogleMap } from "vue3-google-map";
 import GetComment from "../GetComment.vue";
 import DrawingManager from "./DrawingManager.vue";
 import PlaceSelector from "./PlaceSelector.vue";
+import CompassControl from "./CompassControl.vue";
 import type { DataPackage, DrawnArea } from "@/types";
 import { DataPackageInjectionKey, DefaultDataPackage } from "@/injections";
 import { useTheme } from "vuetify";
@@ -176,6 +177,7 @@ onBeforeUnmount(() => {
     <CustomControl position="TOP_CENTER" class="mt-1">
       <PlaceSelector :disabled="!!error" @place-selected="centerOnPlace" />
     </CustomControl>
+
     <CustomControl position="TOP_RIGHT" class="mt-1 mr-1">
       <v-btn-toggle v-model="selectedMode" mandatory>
         <v-btn
@@ -194,6 +196,7 @@ onBeforeUnmount(() => {
         />
       </v-btn-toggle>
     </CustomControl>
+
     <CustomControl position="RIGHT_CENTER" class="d-flex flex-column ma-1">
       <v-btn size="small" icon="mdi-plus" :disabled="zoom >= 21" @click="zoom++" class="rounded-t-lg rounded-b-0" />
       <v-btn size="small" icon="mdi-minus" :disabled="zoom <= 16" @click="zoom--" class="rounded-b-lg rounded-t-0" />
@@ -206,6 +209,10 @@ onBeforeUnmount(() => {
         @center-on-user="centerOnUser()"
         @clear-all-polygons="clearAllPolygons()"
       />
+    </CustomControl>
+
+    <CustomControl position="RIGHT_BOTTOM" class="mb-1 mr-1">
+      <CompassControl :angle="0" />
     </CustomControl>
   </GoogleMap>
 </template>
